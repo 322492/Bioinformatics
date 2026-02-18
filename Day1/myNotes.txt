@@ -1,0 +1,19 @@
+
+command to exercise 2:
+esearch -db nuccore -query "NC_001416" | efetch -format fasta > lambda_phage.fasta
+
+command to exercises 3.3:
+python revcomp.py lambda_phage.fasta > lambda_phage.revcomp.fasta
+
+
+command to exercise 4:
+revseq -sequence lambda_phage.fasta -outseq lambda_phage.emboss.fasta -notag
+
+command to exercise 5:
+grep -v '^>' lambda_phage.revcomp.fasta | tr -d '\n' | md5sum
+grep -v '^>' lambda_phage.emboss.fasta  | tr -d '\n' | md5sum
+//if sequences are identical then hashes also should be identical
+
+commands to exercise 6:
+make clean
+make
