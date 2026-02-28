@@ -1,0 +1,79 @@
+command to exercise 1:
+make env
+conda activate bioinfo_lab2
+
+command to exercises 3 and 4:
+make download_data
+* D. melanogaster Chromosome Y FASTA not available in Ensembl release-115 path -> using dmel_dna.fa.gz (toplevel) as the drosophila DNA input
+
+command to exercises 5.1-5.3:
+make ex5
+
+command to exercise 5.4:
+make transform
+
+command to 5.5:
+make mask_polyA
+
+command to 5.6:
+make ecori
+cat results/GAATTC.num.txt
+
+commands to 6.2
+make gc_py
+
+commands to 6.2
+make gc_emboss
+
+6.3
+make ex6
+cat results/gc_compare.txt
+
+The weighted mean from the Python script does not match the average calculated from the EMBOSS output.
+The Python script computes GC content as a weighted mean across all nucleotides in the dataset,
+meaning each nucleotide contributes equally to the final value. In contrast, EMBOSS reports GC content per sequence.
+When those per-sequence GC values are averaged, each sequence contributes equally regardless of its length.
+Since transcript lengths vary significantly, the arithmetic mean of per-sequence GC differs from the global weighted GC.
+The difference therefore results from weighted versus unweighted averaging.
+
+commands 7.1
+make bench
+cat results/gc_bench_table.tsv
+
+command to 7.2:
+make bench
+
+7.3
++-------------+-------------------+----------+---------------+------------+
+| Tool        | Input Filename    | Time (s) | Peak Mem (KB) | Input Size |
++-------------+-------------------+----------+---------------+------------+
+| gc_stats.py | dmel_cdna.fa.gz   |     6.06 |          7680 |   89286901 |
+| gc_stats.py | human_cdna.fa.gz  |    54.37 |          7552 |  742967561 |
+| gc_stats.py | dmel_dna.fa.gz    |    10.99 |          7680 |    3667352 |
+| gc_stats.py | human_chry.fa.gz  |     5.66 |          7680 |   57227415 |
+| EMBOSS Tool | dmel_cdna.fa.gz   |     1.22 |          9472 |   89286901 |
+| EMBOSS Tool | human_cdna.fa.gz  |     9.89 |          9472 |  742967561 |
+| EMBOSS Tool | dmel_dna.fa.gz    |     2.00 |         41472 |    3667352 |
+| EMBOSS Tool | human_chry.fa.gz  |     0.77 |         74368 |   57227415 |
++-------------+-------------------+----------+---------------+------------+
+
+7.4
+
+Scaling
+The memory usage of the Python script remains relatively stable across different input sizes.
+Peak memory does not increase proportionally with file size,
+indicating that the implementation processes sequences in a streaming manner rather than storing the entire dataset in memory.
+Therefore, memory usage does not scale linearly with total file size or with the length of the longest sequence.
+Time, however, increases roughly proportionally to input size.
+
+Implementation
+The /usr/bin/time binary is required because it reports detailed resource usage,
+including maximum resident set size (peak memory, %M).
+The built-in shell time command typically reports only execution time and does not provide reliable memory statistics.
+Therefore, /usr/bin/time is necessary for accurate memory benchmarking.
+
+commands to 8.1:
+make ex8
+
+commands to 8.2:
+cat results/orf_stats.txt
