@@ -1,0 +1,37 @@
+########################################
+# Program: needle
+# Rundate: Wed  4 Mar 2026 11:55:07
+# Commandline: needle
+#    -asequence seqA.fasta
+#    -bsequence seqB.fasta
+#    -outfile global_alignment.txt
+#    -auto
+# Align_format: srspair
+# Report_file: global_alignment.txt
+########################################
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: seqA
+# 2: seqB
+# Matrix: EDNAFULL
+# Gap_penalty: 10.0
+# Extend_penalty: 0.5
+#
+# Length: 7
+# Identity:       5/7 (71.4%)
+# Similarity:     5/7 (71.4%)
+# Gaps:           1/7 (14.3%)
+# Score: 11.0
+# 
+#
+#=======================================
+
+seqA               1 GATC-TA      6
+                     ||.| ||
+seqB               1 GAACGTA      7
+
+
+#---------------------------------------
+#---------------------------------------

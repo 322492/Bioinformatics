@@ -1,0 +1,99 @@
+command to exercise 1:
+conda create -n bioinfo_lab3 python=3.11 -y
+conda activate bioinfo_lab3
+
+exercise 2:
+Sequence 1 (columns): T A G C T A G C G A T C G A T
+Sequence 2 (rows):    T A G C T A C C G A T C G A T
+
+Dot plot (X = match, . = mismatch)
+
+      C1 C2 C3 C4 C5 C6 C7 C8 C9 C10 C11 C12 C13 C14 C15
+      T  A  G  C  T  A  G  C  G  A   T   C   G   A   T
+R1 T  X  .  .  .  X  .  .  .  .   .   X   .   .   .   X
+R2 A  .  X  .  .  .  X  .  .  .   X   .   .   .   X   .
+R3 G  .  .  X  .  .  .  X  .  X   .   .   .   X   .   .
+R4 C  .  .  .  X  .  .  .  X  .   .   .   X   .   .   .
+R5 T  X  .  .  .  X  .  .  .  .   .   X   .   .   .   X
+R6 A  .  X  .  .  .  X  .  .  .   X   .   .   .   X   .
+R7 C  .  .  .  X  .  .  .  X  .   .   .   X   .   .   .
+R8 C  .  .  .  X  .  .  .  X  .   .   .   X   .   .   .
+R9 G  .  .  X  .  .  .  X  .  X   .   .   .   X   .   .
+R10 A .  X  .  .  .  X  .  .  .   X   .   .   .   X   .
+R11 T X  .  .  .  X  .  .  .  .   .   X   .   .   .   X
+R12 C .  .  .  X  .  .  .  X  .   .   .   X   .   .   .
+R13 G .  .  X  .  .  .  X  .  X   .   .   .   X   .   .
+R14 A .  X  .  .  .  X  .  .  .   X   .   .   .   X   .
+R15 T X  .  .  .  X  .  .  .  .   .   X   .   .   .   X
+
+Main diagonal:
+- Continuous from (R1,C1) to (R6,C6)
+- Break at (R7,C7): row letter C vs column letter G (mismatch)
+- Continuous again from (R8,C8) to (R15,C15)
+
+Interpretation:
+- The break represents a single-nucleotide substitution (point mutation / SNV).
+- Here it is G -> C at position 7.
+
+2.3 (sliding window, k=3):
+- Gap size in the new main diagonal = 3.
+- Reason: one point mutation disrupts exactly k overlapping k-mers, so for k=3 it breaks 3 consecutive diagonal positions (window starts 5, 6, 7).
+
+exercise 3:
+Script: Day3/exercise3_metrics.py
+Run:
+python Day3/exercise3_metrics.py
+
+Expected results for Exercise 3 input:
+3.1 Hamming distance = 1 (mismatch at position 3: G -> C)
+3.2 Composition vectors [A, T, G, C]:
+    Seq1 = [A:2, T:2, G:2, C:1]
+    Seq2 = [A:2, T:2, G:1, C:2]
+3.3 Manhattan distance (L1) = |2-2| + |2-2| + |2-1| + |1-2| = 2
+3.4 Euclidean distance (L2) = sqrt((2-2)^2 + (2-2)^2 + (2-1)^2 + (1-2)^2) = sqrt(2) = 1.414214
+
+exercise 4:
+4.1 Percentage identity for the given alignment
+Seq A: G A T C - T A
+       | |   |   | |
+Seq B: G A A C G T A
+
+Matches = 5  (positions: 1, 2, 4, 6, 7)
+Mismatches = 1  (position 3: T vs A)
+Gaps = 1  (position 5: - vs G)
+Total alignment length = Matches + Mismatches + Gaps = 5 + 1 + 1 = 7
+Percent identity = (Matches / Total alignment length) x 100
+Percent identity = (5 / 7) x 100 = 71.43%
+
+4.2 Global alignment automation (EMBOSS needle)
+Script: run_alignment.sh
+What it does:
+- creates seqA.fasta with sequence GATCTA
+- creates seqB.fasta with sequence GAACGTA
+- runs needle with default parameters
+- saves output to global_alignment.txt
+
+Run:
+conda install -n bioinfo_lab3 -c conda-forge emboss -y
+./run_alignment.sh
+
+exercise 5:
+5.2 CLI script:
+- Script: hamming_distance.py
+- Input args: --seq1 <sequence> --seq2 <sequence>
+- Success output: prints only integer distance to stdout.
+- Error handling: catches empty/unequal inputs, prints message to stderr, exits with non-zero code.
+
+Example:
+python hamming_distance.py --seq1 ATGCGTACGTAGCTA --seq2 ATGCCTACGTAGCTA
+
+5.3 Automated testing:
+- Script: run_tests.sh
+- Generates hamming.csv from scratch.
+- For failed pair(s), writes -1 in CSV as required.
+
+Run:
+chmod +x run_tests.sh
+./run_tests.sh
+
+
