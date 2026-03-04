@@ -48,3 +48,9 @@ Thumbs.db
 # WSL / Linux noise
 ############################
 *.out
+
+############################
+# Project artifacts (all subdirectories)
+############################
+data/
+results/
