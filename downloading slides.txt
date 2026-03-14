@@ -1,0 +1,7 @@
+Slides - Google 
+* /edit... -> /htmlpresent
+* Single file extension to download single html file
+
+Exercises - Google docs
+* /edit... -> view
+* use https://urlgd.com/download-pdf
