@@ -1,0 +1,173 @@
+command to exercise 1:
+conda create -n bioinfo_lab4 -c conda-forge -c bioconda samtools minimap2 bowtie2 blast wget -y
+conda activate bioinfo_lab4
+conda env export -n bioinfo_lab4 > Day4/environment.yml
+
+command to exercise 2.1:
+samtools view -h "https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase3/data/HG00096/alignment/HG00096.mapped.ILLUMINA.bwa.GBR.low_coverage.20120522.bam" "20:1000000-1000500" > subset_region.sam
+
+exercise 2.2:
+line 93,
+alignment software: bwa
+version: 0.5.9-r16
+
+exercise 2.3:
+- ALL.wgs.indels_mills_devine_hg19_leftAligned_collapsed_double_hit.indels.sites.vcf.gz
+- ALL.wgs.low_coverage_vqsr.20101123.indels.sites.vcf.gz
+- ALL.wgs.dbsnp.build135.snps.sites.vcf.gz
+
+exercise 2.4.1:
+- read is paired = 1
+- read is mapped in a proper pair = 2
+- query read maps to the reverse strand = 16
+- total flag = 1 + 2 + 16 = 19
+
+command to exercise 2.4.2:
+samtools view -h -f 19 subset_region.sam > reverse_proper_pairs.sam
+13 reads
+
+command to exercise 2.4.3:
+samtools view -b -h -f 8 subset_region.sam > mate_unmapped.bam
+0 reads
+
+exercise 2.5:
+read: SRR062634.14357016
+position: chr20:1000435
+CIGAR: 4S8M4D88M
+CIGAR string length: 9 characters
+M total = 8 + 88 = 96
+indels total = 4D = 4
+read length = 4S + 8M + 88M = 100
+reference span = 8M + 4D + 88M = 100
+
+command to exercise 2.6.1:
+samtools view -b -o subset.unsorted.bam subset_region.sam
+
+command to exercise 2.6.2:
+samtools sort -o subset.bam subset.unsorted.bam
+
+command to exercise 2.6.3:
+samtools index subset.bam
+
+result:
+- subset.bam created
+- subset.bam.bai created
+- alignments in subset.bam: 28
+
+command to exercise 2.7.1:
+samtools mpileup -f "ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/technical/reference/phase2_reference_assembly_sequence/hs37d5.fa.gz" -r "20:1000000-1000100" subset.bam > region_20_1000000_1000100.mpileup
+samtools tview subset.bam "ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/technical/reference/phase2_reference_assembly_sequence/hs37d5.fa.gz" -d T -p "20:1000000" > tview_20_1000000.txt
+
+exercise 2.7.2:
+candidate high-confidence SNP at chr20:1000072
+reference base: A
+observed read bases: gggggG
+interpretation: all 6 covering reads support G instead of the reference A
+pileup representation: lowercase/uppercase g means a mismatch to the reference on reverse/forward strand
+conclusion: likely SNP A>G at chr20:1000072
+no clear indel observed in the 1000000-1000100 window
+
+command to exercise 3.1.1:
+wget -O reference.fa "https://raw.githubusercontent.com/BenLangmead/bowtie2/master/example/reference/lambda_virus.fa"
+
+command to exercise 3.1.2:
+wget -O reads.fq "https://raw.githubusercontent.com/BenLangmead/bowtie2/master/example/reads/reads_1.fq"
+
+command to exercise 3.2:
+minimap2 -a reference.fa reads.fq | samtools sort -o minimap2_alignment.bam
+samtools view -c -F 4 minimap2_alignment.bam
+> reads: 7445
+
+command to exercise 3.3:
+bowtie2-build reference.fa reference_index
+bowtie2 -x reference_index -U reads.fq | samtools sort -o bowtie2_alignment.bam
+samtools view -c -F 4 bowtie2_alignment.bam
+> reads: 9404
+
+exercise 3.4:
+samtools view -c -f 256 bowtie2_alignment.bam
+> 0
+samtools view -c -f 256 bowtie2_alignment.bam
+> 0
+
+exercise 4.1:
+linear gap penalty = 2
+insertion length = 5
+total cost = 5 * 2 = 10
+
+exercise 4.2:
+affine gap penalty: W(k) = gamma + delta * k
+gamma = 8
+delta = 0.5
+k = 5
+W(5) = 8 + 0.5 * 5 = 8 + 2.5 = 10.5
+
+exercise 4.3:
+the affine model is biologically more realistic because a 5-bp insertion is usually one single mutational event, 
+not five independent 1-bp events. It penalizes opening a gap strongly, then extending the same gap more gently
+this reflects biology better than the linear model, which treats each added gap position as equally costly
+
+exercise 5.1:
+top hit: Cupriavidus basilensis strain DSM 11853 chromosome 2, complete sequence
+E-value: 1e-06 - significant similarity
+
+exercise 5.2:
+high identity does not guarantee homology; it supports an inference of homology
+here the top hit shows 100% identity only over a local 34-nt segment, not the full 54-nt query
+short exact matches can occur by chance or in conserved motifs, so alignment length, coverage, and significance still matter
+
+exercise 6.1.1:
+conda install -c bioconda blast -y
+
+exercise 6.1.2:
+blastn -version
+
+exercise 6.3:
+makeblastdb -in reference.fa -dbtype nucl -out ecoli_db
+
+purpose:
+.nhr = header file with metadata about the BLAST database
+.nin = index file used to locate sequences efficiently
+.nsq = sequence file storing the nucleotide sequence data
+
+exercise 6.4:
+blastn -query query.fasta -db ecoli_db -out blast_results.txt -outfmt 6
+
+top hit:
+mystery_read_1 -> gi|9626243|ref|NC_001416.1|
+E-value: 1.60e-27
+
+only 1 hit was found in blast_results.txt, so there are not 5 hits to list
+this is expected because the local database was built from reference.fa from exercise 3, not from a large multi-sequence database
+
+exercise 6.5.1:
+which update_blastdb.pl
+> /home/kamtas/miniconda3/envs/bioinfo_lab4/bin/update_blastdb.pl
+
+exercise 6.5.2:
+update_blastdb.pl --decompress refseq_select_rna
+
+file extensions after decompression:
+.ndb .nhr .nin .nnd .nni .nog .nos .not .nsq .ntf .nto
+
+difference vs makeblastdb:
+the downloaded preformatted database includes additional files such as .ndb .nnd .nni .nog .nos .not .ntf .nto
+manual makeblastdb gave a simpler local set centered on .nhr .nin .nsq
+
+exercise 6.5.3:
+blastn -query query.fasta -db refseq_select_rna -out blast_results_refseq_select_rna.txt -outfmt 6
+top hit:
+mystery_read_2 -> NM_002046.7
+E-value: 1.86e-23
+no, the top hit is not the same as in exercise 5.2
+
+exercise 6.5.4:
+research institutes keep large BLAST databases locally because searches are faster, sensitive data does not need to leave the institute, and BLAST can be integrated into automated pipelines
+local copies also allow many researchers to run repeated jobs without depending on the public web interface or queue limits
+
+
+
+
+
+
+

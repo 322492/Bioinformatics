@@ -1,0 +1,38 @@
+Betacoronavirus	Betacoronavirus	  71.0289	2025-06-26T00:00:00
+18S_fungal_sequences	18S ribosomal RNA sequences (SSU) from Fungi type and reference material	   0.0026	2026-03-12T00:00:00
+ITS_RefSeq_Fungi	Internal transcribed spacer region (ITS) from Fungi type and reference material	   0.0087	2026-03-13T00:00:00
+28S_fungal_sequences	28S ribosomal RNA sequences (LSU) from Fungi type and reference material	   0.0066	2026-03-12T00:00:00
+16S_ribosomal_RNA	16S ribosomal RNA (Bacteria and Archaea type strains)	   0.0182	2026-03-12T00:00:00
+ITS_eukaryote_sequences	ITS eukaryote BLAST	   0.0344	2026-03-09T00:00:00
+LSU_eukaryote_rRNA	Large subunit ribosomal nucleic acid for Eukaryotes	   0.0053	2022-12-05T00:00:00
+LSU_prokaryote_rRNA	Large subunit ribosomal nucleic acid for Prokaryotes	   0.0041	2022-12-05T00:00:00
+SSU_eukaryote_rRNA	Small subunit ribosomal nucleic acid for Eukaryotes	   0.0063	2022-12-05T00:00:00
+env_nt	environmental samples	   0.4045	2026-03-06T00:00:00
+env_nr	Proteins from WGS metagenomic projects (env_nr).	   4.4633	2026-03-11T00:00:00
+human_genome	Homo sapiens GRCh38.p13 [GCF_000001405.39] chromosomes plus unplaced and unlocalized scaffolds	   1.1572	2021-06-02T14:21:05.818179
+landmark	Landmark database for SmartBLAST	   0.4693	2025-08-06T00:00:00
+mito	NCBI Genomic Mitochondrial Reference Sequences	   0.1540	2026-03-10T00:00:00
+mouse_genome	Mus musculus GRCm39 [GCF_000001635.27] chromosomes plus unplaced and unlocalized scaffolds	   3.6543	2021-06-02T14:57:39.271180
+nr	All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects	 673.0419	2026-03-10T00:00:00
+nt_euk	Eukaryota nt	 732.0922	2026-01-19T00:00:00
+nt	Nucleotide collection (nt)	 930.4182	2026-03-09T00:00:00
+nt_others	Artificial and other seqs nt	   1.0896	2026-01-26T00:00:00
+nt_prok	Prokaryota (bacteria and archaea) nt	  91.0333	2026-03-09T00:00:00
+nt_viruses	Viruses nt	  67.9930	2026-03-09T00:00:00
+pataa	Protein sequences derived from the Patent division of GenBank	   2.2514	2026-03-11T00:00:00
+patnt	Nucleotide sequences derived from the Patent division of GenBank	  17.6691	2026-03-07T00:00:00
+pdbaa	PDB protein database	   0.2465	2026-03-12T00:00:00
+pdbnt	PDB nucleotide database	   0.0147	2026-03-11T00:00:00
+ref_euk_rep_genomes	RefSeq Eukaryotic Representative Genome Database	 482.5566	2025-04-12T00:00:00
+ref_prok_rep_genomes	Refseq prokaryote reference genomes (contains refseq assembly)	  25.8561	2026-03-11T00:00:00
+ref_viroids_rep_genomes	Refseq viroids reference genomes	   0.0001	2026-03-11T00:00:00
+ref_viruses_rep_genomes	Refseq viruses reference genomes	   0.1440	2026-03-11T00:00:00
+refseq_select_rna	RefSeq Select RNA sequences	   0.0681	2026-03-10T00:00:00
+refseq_select_prot	RefSeq Select proteins	  45.2062	2026-03-10T00:00:00
+refseq_protein	NCBI Protein Reference Sequences	 254.0719	2026-03-14T00:00:00
+refseq_rna	NCBI Transcript Reference Sequences	  71.3789	2026-03-13T00:00:00
+swissprot	Non-redundant UniProtKB/SwissProt sequences	   0.3648	2026-03-12T00:00:00
+tsa_nr	Transcriptome Shotgun Assembly (TSA) sequences	   6.1064	2026-03-11T00:00:00
+tsa_nt	Transcriptome Shotgun Assembly (TSA) sequences	   6.3489	2026-03-08T00:00:00
+taxdb	Taxonomy database	   0.2861	2026-03-12T16:22:54.081257
+core_nt	Core nucleotide BLAST database	 287.4420	2026-03-02T00:00:00
