@@ -1,0 +1,40 @@
+########################################
+# Program: needle
+# Rundate: Thu 26 Mar 2026 13:06:31
+# Commandline: needle
+#    -asequence asis:HEAGAWGHEE
+#    -bsequence asis:PAWHEAE
+#    -gapopen 10
+#    -gapextend 0.5
+#    -datafile EBLOSUM62
+#    -outfile ex4_needle.txt
+#    -auto
+# Align_format: srspair
+# Report_file: ex4_needle.txt
+########################################
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: asis
+# 2: asis
+# Matrix: EBLOSUM62
+# Gap_penalty: 10.0
+# Extend_penalty: 0.5
+#
+# Length: 10
+# Identity:       3/10 (30.0%)
+# Similarity:     3/10 (30.0%)
+# Gaps:           3/10 (30.0%)
+# Score: 15.0
+# 
+#
+#=======================================
+
+asis               1 HEAGAWGHEE     10
+                        .||...|
+asis               1 ---PAWHEAE      7
+
+
+#---------------------------------------
+#---------------------------------------

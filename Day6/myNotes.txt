@@ -1,0 +1,218 @@
+command to exercise 1:
+conda env create -f environment.yml
+conda activate bioinfo_lab6
+
+exercise 2.1:
+sequence A: GATTACA
+sequence B: GTCGACG
+scoring (penalty): insertion = 1, deletion = 1, substitution = 1
+
+DP matrix (rows = A incl. empty prefix, columns = B incl. empty prefix):
+      -  G  T  C  G  A  C  G
+  -   0  1  2  3  4  5  6  7
+  G   1  0  1  2  3  4  5  6
+  A   2  1  1  2  3  3  4  5
+  T   3  2  1  2  3  4  4  5
+  T   4  3  2  2  3  4  5  5
+  A   5  4  3  3  3  3  4  5
+  C   6  5  4  3  4  4  3  4
+  A   7  6  5  4  4  4  4  4
+
+edit distance = 4
+
+exercise 2.2:
+one optimal traceback/alignment:
+A: G A T T A C A
+B: G T C G A C G
+
+operations:
+G=G (match)
+A->T (substitution)
+T->C (substitution)
+T->G (substitution)
+A=A (match)
+C=C (match)
+A->G (substitution)
+
+total penalty = 4
+
+command to exercise 3:
+python needleman_wunsch.py --seq1 GATTACA --seq2 GTCGACG
+
+command to exercise 4.1:
+needle -asequence asis:HEAGAWGHEE -bsequence asis:PAWHEAE -gapopen 10 -gapextend 0.5 -datafile EBLOSUM62 -outfile ex4_needle.txt -auto
+
+command to exercise 4.2:
+water -asequence asis:HEAGAWGHEE -bsequence asis:PAWHEAE -gapopen 10 -gapextend 0.5 -datafile EBLOSUM62 -outfile ex4_water.txt -auto
+
+command to extract scores:
+grep -i "Score" ex4_needle.txt
+grep -i "Score" ex4_water.txt
+
+exercise 4.1:
+# Score: 15.0
+
+exercise 4.2:
+# Score: 18.0
+
+exercise 4.3:
+global alignment compares entire sequences end-to-end, so mismatching flanks and length differences reduce the total score
+local alignment focuses on the best conserved fragment only, so it usually gives a higher score when only part of sequences is homologous
+biological interpretation: these proteins likely share a conserved local motif/domain, but are not uniformly similar across full length
+
+exercise 5:
+heuristic aligners (BLAST, minimap2) use seed-and-extend instead of evaluating all DP cells like full Smith-Waterman
+computational gain:
+- much faster runtime
+- much lower memory usage
+- scalable to very large databases and long-read datasets
+trade-off / what is lost:
+- no guarantee of globally optimal local alignment
+- reduced sensitivity for weak/divergent homology (especially if seeds are sparse or disrupted by many mismatches/indels)
+- results depend on heuristic parameters (k-mer size, seed density, chaining thresholds), so accuracy-speed balance must be tuned
+
+summary:
+heuristics buy speed and scalability, but sacrifice optimality guarantees and some sensitivity
+
+exercise 6.1:
+CIGAR: 30M1500N70M
+read length counts operations consuming query bases: M, I, S, =, X
+here: 30M + 70M = 100
+read length = 100 bp
+
+exercise 6.2:
+reference span counts operations consuming reference bases: M, D, N, =, X
+here: 30M + 1500N + 70M = 1600
+reference span = 1600 bp
+
+exercise 6.3:
+N in RNA-seq splice-aware alignment means a skipped region on the reference (typically an intron between exons)
+it represents transcript splicing: the read is contiguous in RNA/cDNA, but alignment jumps over intronic genomic sequence
+D (deletion) means a true gap relative to the reference within one local alignment block, usually a small indel event
+key difference: N models exon-exon junction / long genomic skip, D models sequence-level deletion in the aligned region
+
+exercise 6.4:
+a standard contiguous DNA aligner like bwa mem assumes mostly colinear alignment with short indels and does not explicitly model splice junctions
+for a read spanning an exon-exon junction with a long intron-sized gap (1500N), such aligner may:
+- fail to align fully
+- split/soft-clip the read
+- force suboptimal gapped alignment
+therefore RNA-seq reads spanning introns require splice-aware aligners (e.g. STAR, HISAT2, minimap2 -x splice)
+
+exercise 7.1:
+standard reference-based RNA-seq quantification (e.g. STAR + featureCounts) performs full base-level alignment to genomic coordinates, then assigns aligned reads/fragments to genes/features
+pseudo-alignment (kallisto/salmon) skips full DP/base-level alignment and instead maps reads to compatible transcripts using k-mer/transcriptome indexing and probabilistic assignment
+paradigm shift:
+- from exact read-to-genome alignment + counting
+- to lightweight compatibility mapping + statistical abundance inference
+practical effect: much faster and lower-memory quantification, especially for large cohorts
+
+exercise 7.2:
+main limitation of pseudo-alignment: loss of explicit base-resolution genomic positioning (no full CIGAR-level alignment to the genome)
+you lose or strongly limit:
+- precise genomic coordinates of each read
+- direct inspection of splice junction placement per read
+- robust variant/indel calling from read alignments
+- structural-event analyses requiring exact mapping context (novel splice sites, fusions, allele-specific mapping details)
+in short: excellent for transcript quantification, weaker when downstream tasks need exact per-base genomic alignments
+
+command to exercise 8.1 (create folders):
+mkdir -p data/{ref,reads,idx}
+
+command to exercise 8.1 (full human references from Ensembl, GRCh38):
+wget -P data/ref https://ftp.ensembl.org/pub/current_fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz
+wget -P data/ref https://ftp.ensembl.org/pub/current_fasta/homo_sapiens/cdna/Homo_sapiens.GRCh38.cdna.all.fa.gz
+GTF_URL=$(curl -s https://ftp.ensembl.org/pub/current_gtf/homo_sapiens/ | sed -n 's/.*href="\\(Homo_sapiens\\.GRCh38\\.[0-9]\\+\\.gtf\\.gz\\)".*/\\1/p' | head -n 1)
+wget -P data/ref "https://ftp.ensembl.org/pub/current_gtf/homo_sapiens/${GTF_URL}"
+GTF_GZ=$(ls data/ref/Homo_sapiens.GRCh38.*.gtf.gz | head -n 1)
+echo "$GTF_GZ"
+gunzip -c "$GTF_GZ" > data/ref/Homo_sapiens.GRCh38.current.gtf
+GTF=data/ref/Homo_sapiens.GRCh38.current.gtf
+
+command to exercise 8.1 (raw paired-end reads, SRR1039508 from ENA):
+wget -P data/reads ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR103/008/SRR1039508/SRR1039508_1.fastq.gz
+wget -P data/reads ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR103/008/SRR1039508/SRR1039508_2.fastq.gz
+
+command to exercise 8.1 (resource-light subset: chr22 references):
+gunzip -c data/ref/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz > data/ref/Homo_sapiens.GRCh38.dna.primary_assembly.fa
+rm -f data/ref/Homo_sapiens.GRCh38.dna.primary_assembly.fa.fai
+samtools faidx data/ref/Homo_sapiens.GRCh38.dna.primary_assembly.fa
+samtools faidx data/ref/Homo_sapiens.GRCh38.dna.primary_assembly.fa 22 > data/ref/Homo_sapiens.GRCh38.chr22.fa
+grep -E '^#|\\t22\\t' "$GTF" > data/ref/Homo_sapiens.GRCh38.chr22.gtf
+
+command to exercise 8.1 (resource-light subset: first 200000 read pairs):
+zcat data/reads/SRR1039508_1.fastq.gz | awk 'NR<=800000' | gzip > data/reads/SRR1039508_1.first200k.fastq.gz
+zcat data/reads/SRR1039508_2.fastq.gz | awk 'NR<=800000' | gzip > data/reads/SRR1039508_2.first200k.fastq.gz
+
+command to exercise 8.2.1 (HISAT2 index):
+hisat2_extract_splice_sites.py "$GTF" > data/ref/splice_sites.txt
+hisat2-build --ss data/ref/splice_sites.txt data/ref/Homo_sapiens.GRCh38.dna.primary_assembly.fa data/idx/hisat2_grch38
+
+command to exercise 8.2.1 (Kallisto index):
+kallisto index -i data/idx/kallisto_grch38_cdna.idx data/ref/Homo_sapiens.GRCh38.cdna.all.fa.gz
+
+exercise 8.2.2:
+HISAT2 must use genomic DNA FASTA (reference genome), because it aligns reads to genomic coordinates and splice-aware exon-intron structure
+Kallisto must use transcript cDNA FASTA (transcriptome), because pseudo-alignment is performed against transcript sequences
+
+exercise 8.2.3:
+HISAT2 benefits from GTF-derived splice sites because known exon junctions improve splice-aware genomic alignment sensitivity and accuracy
+Kallisto ignores GTF at indexing because its index is built directly from transcript sequences; exon structure is already implicit in transcript FASTA entries
+in other words, transcriptome FASTA already encodes the spliced products, so a separate exon-intron annotation is not required for index construction
+
+command to exercise 8.3.1 (HISAT2 mapping -> SAM -> BAM):
+hisat2 -x data/idx/hisat2_grch38 -1 data/reads/SRR1039508_1.first200k.fastq.gz -2 data/reads/SRR1039508_2.first200k.fastq.gz -S Day6/data/reads/hisat2_200k.sam --threads 8
+samtools view -bS data/reads/hisat2_200k.sam > data/reads/hisat2_200k.bam
+samtools sort -o data/reads/hisat2_200k.sorted.bam data/reads/hisat2_200k.bam
+samtools index data/reads/hisat2_200k.sorted.bam
+
+command to exercise 8.3.1 (gene counts with featureCounts + GTF):
+featureCounts -T 8 -p -t exon -g gene_id -a "$GTF" -o data/reads/hisat2_featureCounts.txt data/reads/hisat2_200k.sorted.bam
+
+exercise 8.3.1 (concept):
+HISAT2 provides genomic alignments (BAM coordinates + splice-aware CIGARs)
+featureCounts uses the GTF exon intervals to assign aligned fragments to genes (gene_id) and outputs the final count matrix
+
+command to exercise 8.3.2 (Kallisto quantification):
+kallisto quant -i data/idx/kallisto_grch38_cdna.idx -o data/reads/kallisto_200k -b 100 data/reads/SRR1039508_1.first200k.fastq.gz Day6/data/reads/SRR1039508_2.first200k.fastq.gz
+
+exercise 8.3.2:
+kallisto outputs transcript-level abundance files (abundance.tsv, abundance.h5, run_info.json) directly without genomic BAM generation
+
+exercise 8.4:
+pipeline required to discover a novel unannotated splice junction: HISAT2 (or another splice-aware genome aligner)
+why:
+- novel junction discovery requires read-level genomic split alignments crossing exon-exon boundaries not present in GTF
+- HISAT2 can align to the genome with split CIGARs (N) and reveal previously unannotated junction positions
+why Kallisto fails for this specific task:
+- pseudo-alignment is performed against known transcript sequences in the transcriptome index
+- if junction/transcript is absent from annotation/transcript FASTA, it cannot be explicitly discovered as a new genomic junction event
+
+exercise 8.5.1:
+required data manipulation before comparison:
+map Kallisto transcript IDs (ENST...) to parent gene IDs (ENSG...) using GTF, then aggregate transcript-level est_counts to gene-level counts
+without this transcript->gene aggregation, comparison to featureCounts gene-level output is not valid
+
+exercise 8.5.2:
+recommended scripting steps (Python/pandas):
+- parse GTF and build transcript_id -> gene_id mapping table
+- load Kallisto abundance.tsv, map transcript IDs to genes, sum est_counts per gene
+- load featureCounts output and extract Geneid plus count column
+- merge both tables on gene_id (inner join)
+- compute similarity metric: Spearman rank correlation
+- make scatter plot of log2(count + 1): featureCounts vs Kallisto
+Spearman is preferred because counts are non-normal and mainly compared by rank/monotonic concordance
+
+command to exercise 8.5.3:
+python compare_kallisto_featurecounts.py --gtf "$GTF" --kallisto data/reads/kallisto_200k/abundance.tsv --featurecounts Day6/data/reads/hisat2_featureCounts.txt --out-prefix Day6/data/reads/kallisto_vs_featurecounts
+
+exercise 8.5.3:
+script: compare_kallisto_featurecounts.py
+outputs:
+- data/reads/kallisto_vs_featurecounts.merged.tsv
+- data/reads/kallisto_vs_featurecounts.stats.txt
+- data/reads/kallisto_vs_featurecounts.scatter.png
+required reported statistic: Spearman rho (with p-value)
+
+
+

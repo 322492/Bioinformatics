@@ -1,0 +1,40 @@
+########################################
+# Program: water
+# Rundate: Thu 26 Mar 2026 13:07:11
+# Commandline: water
+#    -asequence asis:HEAGAWGHEE
+#    -bsequence asis:PAWHEAE
+#    -gapopen 10
+#    -gapextend 0.5
+#    -datafile EBLOSUM62
+#    -outfile ex4_water.txt
+#    -auto
+# Align_format: srspair
+# Report_file: ex4_water.txt
+########################################
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: asis
+# 2: asis
+# Matrix: EBLOSUM62
+# Gap_penalty: 10.0
+# Extend_penalty: 0.5
+#
+# Length: 5
+# Identity:       4/5 (80.0%)
+# Similarity:     4/5 (80.0%)
+# Gaps:           1/5 (20.0%)
+# Score: 18.0
+# 
+#
+#=======================================
+
+asis               5 AWGHE      9
+                     || ||
+asis               2 AW-HE      5
+
+
+#---------------------------------------
+#---------------------------------------

@@ -1,0 +1,26 @@
+name: bioinfo_lab6
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - python=3.12
+  - samtools
+  - bwa
+  - bcftools
+  - bedtools
+  - fastqc
+  - multiqc
+  - seqtk
+  - minimap2
+  - pigz
+  - emboss
+  - hisat2
+  - kallisto
+  - sra-tools
+  - wget
+  - subread
+  - pandas
+  - numpy
+  - scipy
+  - matplotlib
