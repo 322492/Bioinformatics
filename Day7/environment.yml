@@ -1,0 +1,8 @@
+name: bioinfo_lab7
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - python=3.12
+  - biopython

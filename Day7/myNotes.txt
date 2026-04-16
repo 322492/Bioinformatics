@@ -1,0 +1,104 @@
+exercise 1a:
+organism: Fusarium tricinctum
+gene: translation elongation factor 1-alpha (TEF1)
+
+exercise 1b:
+organism: Bos taurus
+gene: eukaryotic translation elongation factor 1 alpha 1 (EEF1A1)
+
+exercise 1c:
+'No significant similarity found.'
+
+exercise 1d:
+i - 3 ranges
+ii - yes, I can
+
+exercise 1e:
+i 
+1. Homo sapiens aquaporin 3 (Gill blood group) (AQP3), RefSeqGene (LRG_821) on chromosome 9
+2. Human DNA sequence from clone RP11-311H10 on chromosome 9, complete sequence
+3. Homo sapiens aquaporin 3 (Gill blood group) (AQP3) gene, AQP3*01 GX00.008 allele, complete cds
+E-value: expected number of hits with a similar score that would occur by chance in a database of this size; lower is more significant
+Perc. Identity: percentage of aligned positions that are identical between query and subject
+ii
+don't found match (Muscardinus avellanarius genome assembly, chromosome: 13)
+space - mismatch
+| - identical nucleotide
+- - gap introduced in the alignment
+iii
+AQP3 is conserved across multiple species, especially mammals
+Other species with AQP3: Gorilla gorilla gorilla, Hylobates moloch, Pan troglodytes, Pan paniscus, Pongo pygmaeus, Pongo abelli and other primates and rodents
+
+exercise 1f:
+i
+1. steroid receptor RNA activator 1 isoform 1 [Homo sapiens] - query cover: 100%, E-value: 1e-164, identity: 100.00%
+2. steroid receptor RNA activator 1 isoform 1 [Homo sapiens] - query cover: 100%, E-value: 2e-164, identity: 100.00%
+3. steroid receptor RNA activator isoform 2 [Homo sapiens] - query cover: 100%, E-value: 9e-164, identity: 99.55%
+ii
+Query  1    MAELYVKPGNKERGWNDPPQFSYGLQTQAGGPRRSLLTKRVAAPQDGSPRVPASETSPGP  60
+            MAELYVKPGNKERGWNDPPQFSYGLQTQAGGPRRSLL KRVAAPQDGSPRVPASETSPGP
+Sbjct  13   MAELYVKPGNKERGWNDPPQFSYGLQTQAGGPRRSLLIKRVAAPQDGSPRVPASETSPGP  72
+iii
+space - mismatch
++ - conservative substitution / similar amino acids
+- - gap introduced in the alignment
+
+exercise 2a:
+protein HBA Human (P69905) - blastp
+transcript sequence of the HBB Human gene (Refseq NM_000518.5) - blastx
+
+exercise 2b:
+protein HBA Human (P69905) - hemoglobin subunit alpha [Gorilla gorilla gorilla], E-value = 2e-96
+transcript sequence of the HBB Human gene (Refseq NM_000518.5) - hemoglobin subunit beta [Gorilla gorilla gorilla], E-value = 6e-101
+
+exercise 2c:
+protein HBA Human (P69905)
+1. hemoglobin subunit alpha [Gorilla gorilla gorilla]
+2. hemoglobin subunit alpha [Rhinopithecus roxellana]
+3. alpha-2 globin [Pongo pygmaeus]
+4. hemoglobin subunit alpha-1 [Hylobates lar]
+5. hypothetical protein H8957_006364 [Semnopithecus entellus]
+6. hemoglobin subunit alpha-1 [Symphalangus syndactylus]
+7. hypothetical protein H8958_000280 [Nasalis larvatus]
+8. hemoglobin subunit alpha-1 [Nomascus leucogenys]
+9. hemoglobin subunit alpha [Trachypithecus francoisi]
+10. hemoglobin subunit alpha [Callithrix jacchus]
+transcript sequence of the HBB Human gene (Refseq NM_000518.5)
+1. hemoglobin subunit beta [Gorilla gorilla gorilla]
+2. hemoglobin subunit beta [Pongo abelii]
+3. hemoglobin subunit beta [Nomascus leucogenys]
+4. hemoglobin subunit beta [Trachypithecus francoisi]
+5. hemoglobin subunit beta [Hylobates lar]
+6. hemoglobin beta [Pongo pygmaeus]
+7. hemoglobin subunit beta [Rhinopithecus bieti]
+8. hemoglobin subunit beta [Chlorocebus sabaeus]
+9. hemoglobin subunit beta [Semnopithecus entellus]
+10. hemoglobin subunit beta [Colobus angolensis palliatus]
+
+exercise 3:
+conda env create -f environment.yml
+conda activate bioinfo_lab7
+python ex3.py
+result:
+target_sequence       | species                  | length | E-value   | %identity
+----------------------+--------------------------+--------+-----------+----------
+HBA_HUMAN_P69905      | Gorilla gorilla gorilla  | 142    | 2.21e-96  | 99.30
+HBA_HUMAN_P69905      | Rhinopithecus roxellana  | 142    | 5.81e-96  | 98.59
+HBA_HUMAN_P69905      | Pongo pygmaeus           | 142    | 7.64e-96  | 98.59
+HBA_HUMAN_P69905      | Gorilla gorilla          | 141    | 2.29e-95  | 99.29
+HBA_HUMAN_P69905      | Hylobates lar            | 142    | 5.10e-95  | 98.59
+HBA_HUMAN_P69905      | Semnopithecus entellus   | 142    | 6.42e-95  | 97.89
+HBA_HUMAN_P69905      | Nasalis larvatus         | 142    | 2.06e-94  | 97.18
+HBA_HUMAN_P69905      | Nomascus leucogenys      | 142    | 2.35e-94  | 97.89
+HBA_HUMAN_P69905      | Trachypithecus francoisi | 142    | 2.92e-94  | 97.18
+HBA_HUMAN_P69905      | Callithrix geoffroyi     | 142    | 3.80e-94  | 97.18
+HBB_HUMAN_NM_000518.5 | Gorilla gorilla gorilla  | 147    | 5.64e-101 | 99.32
+HBB_HUMAN_NM_000518.5 | Pan paniscus             | 146    | 1.27e-100 | 100.00
+HBB_HUMAN_NM_000518.5 | Pongo abelii             | 147    | 8.37e-100 | 98.64
+HBB_HUMAN_NM_000518.5 | Nomascus leucogenys      | 147    | 5.52e-99  | 97.96
+HBB_HUMAN_NM_000518.5 | Semnopithecus entellus   | 147    | 6.58e-99  | 97.28
+HBB_HUMAN_NM_000518.5 | Hylobates lar            | 146    | 1.04e-98  | 98.63
+HBB_HUMAN_NM_000518.5 | Pongo pygmaeus           | 146    | 1.19e-98  | 98.63
+HBB_HUMAN_NM_000518.5 | Nasalis larvatus         | 147    | 3.02e-98  | 96.60
+HBB_HUMAN_NM_000518.5 | Cercopithecus wolfi      | 147    | 7.42e-98  | 95.92
+HBB_HUMAN_NM_000518.5 | Colobus polykomos        | 147    | 1.18e-97  | 95.92
