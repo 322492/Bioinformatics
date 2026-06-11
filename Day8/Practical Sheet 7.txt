@@ -1,0 +1,5 @@
+The goal of this lab is to explore Biopython's syntax and main functionalities.
+
+Explore the examples given in the class material (T08).
+Explore Rosalind Bioinformatics Armory (https://rosalind.info/problems/list-view/?location=bioinformatics-armory) and try to solve the exercises using Biopython.
+You can find additional example notebooks at: https://github.com/tiagoantao/biopython-notebook

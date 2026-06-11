@@ -1,0 +1,5 @@
+How to Think Like a Computer Scientist (Python Book) - https://howtothink.readthedocs.io/en/latest/index.html
+
+Bioinformatics Programming with Python (Book) - https://miriamspsantos.github.io/bioinf-labs/books/Bioinformatics_Programming_Using_Python.pdf
+
+Data Science at the Command Line (Book) - https://jeroenjanssens.com/dsatcl/chapter-4-creating-command-line-tools
